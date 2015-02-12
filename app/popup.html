@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css styles/main.css -->
+  <link href="styles/main.css" rel="stylesheet">
+  <!-- endbuild -->
+</head>
+<body>
+
+<div class="loading">
+  Searching...
+</div>
+
+<!-- step 1 - where -->
+<div class="content where">
+  <p id="whereHeader" class="header">Where are you going to bookmark?</p>
+  <input id="searchPlacesInput" class="input" type="text" placeholder="Name or address" autofocus/>
+  <a id="searching" class="go_btn" href="#">Go</a>
+  <hr/>
+  <a class="link" href="https://mappingbird.com" target="_blank">Visit MappingBird.com</a>
+</div>
+<!-- end of step 1 - where -->
+
+<!-- step 2 - search -->
+<div class="content search">
+  <!--
+  <div class="item active">
+
+    <p class="title">
+      Eiffel Tower
+    </p>
+    <p class="description">
+      Champ de Mars, 5 Avenue, Anatole France, 75007 Paris, France
+    </p>
+
+    <hr/>
+
+  </div>
+  <div class="item">
+
+    <p class="title">
+      Eiffel Tower Hostel
+    </p>
+    <p class="description">
+      Champ de Mars, 5 Avenue, Anatole France, 75007 Paris, France
+    </p>
+    <hr/>
+
+  </div>
+  !-->
+
+  <a href="#" class="link tryagain">
+    Cannot find the place?
+  </a>
+  <a id="save" class="save_btn" href="#">save</a>
+</div>
+<!-- end of step 2 - where -->
+
+<!-- step 3 - save -->
+<div class="content save">
+  <div class="picture" id="saveCompletePicture">
+    <!--<img id="saveCompletePicture" src="./images/demo.png"/>-->
+  </div>
+  <p class="header">
+    <span id="saveCompleteTitle" class="title">Eiffel Tower</span> Saved
+  </p>
+  <a id="saveCompleteManage" class="manage" href="https://mappingbird.com/app" target="_blank">
+    Manage saved places
+  </a>
+  <hr/>
+  <form id="updateForm">
+  <input id="saveCompleteTag" class="input1" type="text" placeholder="Add tag"/>
+  <textarea id="saveCompleteDescription" class="input2" type="text" placeholder="What would you say about this place..."></textarea>
+  <a id="update" class="update_btn" href="#">Update</a>
+  </form>
+
+</div>
+<!-- end of step 3 - save -->
+
+<!-- error 500 page -->
+<div class="content error">
+  <div class="picture">
+    <img src="./images/extension_oops.jpg"/>
+  </div>
+  <div>
+    <p class="title">OOPS.</p>
+    <p class="description">We are sorry about failing to do what you wanna do. Please try again or tell us how to help you.</p>
+  </div>
+  <div class="button">
+    <a href="#" class="tryagain">Try Again</a>
+    <a href="#" class="feedback">Feedback</a>
+  </div>
+</div>
+<!-- end of error 500 page -->
+
+<!-- feedback form page -->
+<div class="content feedback">
+  <p class="header">Feedback</p>
+  <hr/>
+  <form>
+    <input id="feedbackEmail" class="input1" type="text" placeholder="Email"/>
+    <textarea id="feedbackMessage" class="input2" type="text" placeholder="How can we help you"></textarea>
+    <a id="feedback_btn" class="feedback_btn" href="#">Go</a>
+  </form>
+</div>
+<!-- end of feeback form page -->
+
+<!-- login page -->
+<div class="content login">
+  <p class="header">Log In</p>
+  <hr/>
+  <form>
+    <input id="loginEmail" class="input1" type="text" placeholder="Email" autofocus/>
+    <input id="loginPassword" class="input2" type="password" placeholder="Password"/>
+    <a id="login_btn" class="go_btn" href="#">Log In</a>
+    <hr/>
+    <a href="#" class="signup">Sign Up ></a>
+  </form>
+</div>
+<!-- end of login page -->
+
+<!-- signup page -->
+<div class="content signup">
+  <p class="header">Sign Up</p>
+  <hr/>
+  <form>
+    <input id="signupEmail" class="input1" type="text" placeholder="Email" autofocus/>
+    <input id="signupPassword1" class="input2" type="password" placeholder="Password"/>
+    <input id="signupPassword2" class="input3" type="password" placeholder="Confirm Password"/>
+    <a id="signup_btn" class="go_btn" href="#">Sign Up</a>
+    <hr/>
+    Already have an account?<a href="#" class="loginBtn">  Log in now ></a>
+  </form>
+</div>
+<!-- end of login page -->
+
+<!-- share layout -->
+<a id="close_btn" href="#">
+  <img src="./images/extension_icon_close.png"/>
+</a>
+<!-- end of share layout -->
+
+<!-- build:js scripts/vendor.js -->
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/jquery.autocomplete.js"></script>
+<!-- bower:js -->
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:js scripts/popup.js -->
+<script src="scripts/mappingbird.js"></script>
+<!-- endbuild -->
+</body>
+</html>
