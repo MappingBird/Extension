@@ -230,7 +230,7 @@ $(document).ready(function () {
         loading.hide();
         goToStep1();
       });
-      
+
       return false;
     });
 
@@ -256,7 +256,7 @@ $(document).ready(function () {
               goToStep1();
             } else if (data.error) {
               loading.hide('.content.login');
-              inputError(); 
+              inputError();
             }
         })
       });
@@ -268,7 +268,7 @@ $(document).ready(function () {
       }
    }
 
-   /* 
+   /*
     * signup page
     */
     var goToSignup = function goToSignup() {
@@ -289,7 +289,7 @@ $(document).ready(function () {
               goToLogin();
             } else if (data.error) {
               loading.hide('.content.signup');
-              signUpinputError(); 
+              signUpinputError();
             }
         });
         return false;
@@ -421,10 +421,12 @@ $(document).ready(function () {
         .success(function (data) {
 console.log(Resource.scrapeData);
           // save image 因為 api 的關係， post /api/images 得獨立發送
-          $.post('https://mappingbird.com/api/images', {point: data.id, url: Resource.scrapeData.images[0]});
-          $.post('https://mappingbird.com/api/images', {point: data.id, url: Resource.scrapeData.images[1]});
-          $.post('https://mappingbird.com/api/images', {point: data.id, url: Resource.scrapeData.images[2]});
-          $.post('https://mappingbird.com/api/images', {point: data.id, url: Resource.scrapeData.images[3]});
+          var imageUrl = 'https://mappingbird.com/api/images';
+          Resource.scrapeData.images.forEach(function(image, index) {
+            if (index < 4) {
+              $.post(imageUrl, {point: data.id, url: image});
+            }
+          });
 
           // save id
           Resource.savePointId = data.id;
