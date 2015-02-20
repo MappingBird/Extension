@@ -206,6 +206,13 @@ $(document).ready(function () {
     });
   });
 
+  $('#saveCompleteTag').keypress(function(event) {
+    // Prevent popup show again if enter key is pressed
+    if (event.which === 13) {
+      event.preventDefault();
+    }
+  });
+
   /**
    * error page
    */
