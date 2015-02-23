@@ -131,7 +131,12 @@ $(document).ready(function () {
   };
 
   $('#searching').click(function () {
+    $('#searchForm').submit();
+  });
+
+  $('#searchForm').submit(function(event) {
     goToStep2();
+    event.preventDefault();
   });
 
   var generatePlaceTemplate = function generatePlaceTemplate (data) {
