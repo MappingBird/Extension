@@ -106,7 +106,7 @@ $(document).ready(function () {
       var outputHtml ='';
       loading.hide('.content.search');
 
-      if (data == null || data.error || data.places.length <= 0) {
+      if (data === null || data.error || data.places.length <= 0) {
         goToStep1(true);
       }
 

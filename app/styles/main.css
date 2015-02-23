@@ -7,8 +7,8 @@ body {
 }
 
 hr {
-  border: 1px solid #dddddd;
-  margin: 18px 0 12px 0;
+  border: none;
+  border-top: 1px solid #dddddd;
 }
 
 input {
@@ -54,7 +54,7 @@ a.link {
   font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   font-weight: normal;
-  margin: 16px;
+  margin: 26px 16px 16px 16px;
 }
 
 .label {
@@ -65,8 +65,7 @@ a.link {
 
 .title {
   font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 20px;
-  font-weight: bolder;
+  font-size: 18px;
 }
 
 .loading {
@@ -123,35 +122,53 @@ a.link {
  */
 .content.search {
   display: none;
-  margin-bottom: 65px;
+  margin-bottom: 77px;
 }
 
 .content.search .item {
   cursor: pointer;
-  margin-bottom: 18px;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.content.search .item:hover:before {
+  content: ' \25CF';
+  font-size: 25px;
+  position: absolute;
+  left: -17px;
+  top: -5px;
+  color: #01A9E7;
 }
 
 .content.search .item .title {
   margin-top: 0px;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
+  margin-left: 3px;
 }
 
 .content.search .item.active .title::before {
   content: ' \25CF';
-  /*font-size: 24px;*/
-  margin-left: -18px;
-  margin-right: 3px;
+  font-size: 25px;
+  position: absolute;
+  left: -17px;
+  top: -5px;
   color: #01A9E7;
 }
 
 .content.search .item .description {
   margin-top: 0;
-  margin-bottom: 18px;
+  margin-bottom: 15px;
+  margin-left: 3px;
   font-size: 12px;
+}
+
+.content.search .item:hover .description {
+  color: #F6892A;
 }
 
 .content.search .item.active .description {
   color: #F6892A;
+  margin-left: 5px;
 }
 
 .content.search .item .maps {
@@ -165,16 +182,28 @@ a.link {
 .content.search .item.active hr {
   display: none;
 }
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-top: 1px solid #ddd;
+}
+
 .content.search .save_btn {
-  padding: 13px 153px;
   background-color: #F6892A;
   color: #ffffff;
   text-decoration: none;
-  position: fixed;
-  bottom: 0px;
-  /* margin-top: 36px; */
-  margin-left: -146px;
-  width: 100%;
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: 30px;
+  margin-right: 30px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
 }
 
 .content.search .link {
@@ -335,7 +364,7 @@ a.link {
   width: 276px;
   height: 32px;
   margin-bottom: 8px;
-  
+
 }
 .content.login .input1.errorStyle {
   border: 1px solid #ED1C24;
@@ -385,7 +414,7 @@ a.link {
   width: 276px;
   height: 32px;
   margin-bottom: 8px;
-  
+
 }
 .content.signup .input1.errorStyle {
   border: 1px solid #ED1C24;
