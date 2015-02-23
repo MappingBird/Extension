@@ -104,10 +104,11 @@ a.link {
 }
 
 .content.where .go_btn {
-  padding: 9px 20px;
+  padding: 0 18px;
   background-color: #F6892A;
   color: #ffffff;
   text-decoration: none;
+  height: 37px;
 }
 
 .content.where .link {
