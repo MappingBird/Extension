@@ -36,7 +36,7 @@ $(document).ready(function () {
           $(showEl).css('display', 'block');
         }
       }
-    }
+    };
   })();
 
   $('#close_btn').click(function () {
@@ -223,14 +223,14 @@ $(document).ready(function () {
    */
   var goToError = function goToError() {
     loading.hide('.content.error');
-  }
+  };
 
 /**
    * feedback page
    */
   var goToFeedback = function goToFeedback() {
     loading.hide('.content.feedback');
-  }
+  };
 
   $('#feedback_btn').click(function () {
     loading.show('Sending...');
@@ -270,22 +270,22 @@ $(document).ready(function () {
               loading.hide('.content.login');
               inputError();
             }
-        })
+        });
       });
 
       var inputError = function inputError () {
         // error ui
         $('#loginEmail,#loginPassword').addClass('errorStyle');
         $('#login_btn').addClass('errorStyle'); //.html('Invalid email or password.');
-      }
-   }
+      };
+   };
 
    /*
     * signup page
     */
     var goToSignup = function goToSignup() {
       loading.hide('.content.signup');
-    }
+    };
     $('#signup_btn').click(function (e) {
         if (!$('#signupEmail').val() || !$('#signupPassword1').val() || !$('#signupPassword2').val()) {
           signUpinputError();
@@ -311,7 +311,7 @@ $(document).ready(function () {
         // error ui
         $('#signupEmail,#signupPassword1,#signupPassword2').addClass('errorStyle');
         $('#signup_btn').addClass('errorStyle'); //.html('Invalid email or password.');
-      }
+      };
 });
 
   /**
@@ -336,7 +336,7 @@ $(document).ready(function () {
        */
       $.get('https://mappingbird.com/api/user/current')
         .success(function (data) {
-          console.log('[Login]', data)
+          console.log('[Login]', data);
           Resource.userId = data.id;
           Resource.userEmail = data.email;
 
@@ -489,7 +489,7 @@ console.log(Resource.scrapeData);
           if (fn) {
             fn(data);
           }
-        })
+        });
     },
     SendFeedback: function (obj, fn) {
       // send feedback
@@ -518,5 +518,5 @@ console.log(Resource.scrapeData);
           }
         });
     }
-  }
+  };
 })();
