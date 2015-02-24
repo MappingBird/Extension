@@ -45,6 +45,7 @@ $(document).ready(function () {
 
   $('.tryagain').click(function () {
     $('.content').css('display', 'none');
+    $('.content.search .item').remove();
     goToStep1(true);
   });
 
