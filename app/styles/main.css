@@ -93,6 +93,27 @@ a.link {
 .content.where {
   display: none;
 }
+
+.warningMessage {
+  color: #ED1C24;
+}
+
+.content.where .warningMessage {
+  display: none;
+}
+
+.content.where.showError .warningMessage {
+  display: block;
+}
+
+.content.where.showError .header {
+  display: none;
+}
+
+.content.where.showError input[type=text] {
+  border: 1px solid #ED1C24;
+}
+
 .content.where .header {
   margin-top: 32px;
   margin-bottom: 12px;

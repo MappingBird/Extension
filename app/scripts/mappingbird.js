@@ -136,7 +136,11 @@ $(document).ready(function () {
   });
 
   $('#searchForm').submit(function(event) {
-    goToStep2();
+    if(!$('#searchPlacesInput').val()) {
+      $('.content.where').addClass('showError');
+    } else {
+      goToStep2();
+    }
     event.preventDefault();
   });
 
