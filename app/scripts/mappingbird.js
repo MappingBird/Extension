@@ -131,10 +131,6 @@ $(document).ready(function () {
     });
   };
 
-  $('#searching').click(function () {
-    $('#searchForm').submit();
-  });
-
   $('#searchForm').submit(function(event) {
     if(!$('#searchPlacesInput').val()) {
       $('.content.where').addClass('showError');
