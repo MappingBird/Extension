@@ -10,7 +10,6 @@
     "default_locale": "en",
     "background": {
         "scripts": [
-            "scripts/chromereload.js",
             "scripts/background.js"
         ]
     },
@@ -28,8 +27,9 @@
                 "http://*/*",
                 "https://*/*"
             ],
-            "css": [],
+            "css": ["styles/content.css"],
             "js": [
+                "scripts/utils.js",
                 "scripts/contentscript.js"
             ],
             "run_at": "document_end",
@@ -44,6 +44,7 @@
         "https://maps.googleapis.com/*",
         "http://localhost/*",
         "geolocation",
-        "cookies"
+        "cookies",
+        "storage"
     ]
 }

@@ -2,9 +2,8 @@
 
 'use strict';
 
-
-
 $(document).ready(function () {
+  var searchTooltip, doneTooltip;
 
   /**
    * share js
@@ -128,6 +127,17 @@ $(document).ready(function () {
         $(this).addClass('active');
         Resource.selected = data.places[$(this).index()];
       });
+
+      chrome.storage.local.get('firstRun', function(items) {
+        var firstRun = items.firstRun;
+        var place = $('#searchPlacesInput').val();
+        if (firstRun && place.indexOf('Eiffel Tower') !== -1) {
+          searchTooltip = utils.createTooltip('Save Eiffel Tower',
+            'After confirming which oen to save, click "Save"',
+            ['bottom-arrow', 'popup']);
+          $('.footer').append(searchTooltip);
+        }
+      })
     });
   };
 
@@ -191,6 +201,15 @@ $(document).ready(function () {
 
     });
 
+    if (searchTooltip) {
+      searchTooltip.parentElement.remove(searchTooltip);
+      searchTooltip = null;
+      doneTooltip = utils.createTooltip('Awesome! Place saved',
+        'That\'s it. Now you can decide whether to update tags, ' +
+        'comments or not', ['bottom-arrow', 'done']);
+      $('.content.save').prepend(doneTooltip);
+    }
+
   };
 
   $('#save').click(function () {
@@ -210,6 +229,14 @@ $(document).ready(function () {
       loading.hide('.content.save');
       $('#updateForm').html('<p style="text-align:center;margin:25px 0;"> Place Updated. </p>');
     });
+
+    if (doneTooltip) {
+      doneTooltip.parentElement.remove(doneTooltip);
+      doneTooltip = null;
+      chrome.storage.local.set({firstRun: false}, function() {
+        console.log('tutorial has been finished');
+      });
+    }
   });
 
   $('#saveCompleteTag').keypress(function(event) {
