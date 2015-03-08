@@ -1,10 +1,12 @@
 'use strict';
 
+/* global utils */
+
 (function() {
 
-  chrome.extension.onMessage.addListener(function (request, sender) {
+  chrome.extension.onMessage.addListener(function (request) {
     //Hanlde request based on method
-    if (request.method == 'getSelection') {
+    if (request.method === 'getSelection') {
       var msg = document.getSelection().toString();
 
       //Send selected text back to popup.html
@@ -24,7 +26,7 @@
   var eiffelTowerUrl = 'http://www.lonelyplanet.com/france/paris/sights/' +
     'landmarks-monuments/eiffel-tower';
 
-  var p = new Promise(function(resolve, reject) {
+  var p = new Promise(function(resolve) {
     chrome.storage.local.get('firstRun', function(items) {
       if (items.firstRun === undefined) {
         chrome.storage.local.set({firstRun: true}, function() {
@@ -44,13 +46,11 @@
       var popupTooltip;
       var h1 = document.querySelector('h1.copy--h1');
       var rect = h1.getBoundingClientRect();
-
-      var eiffelTowerTooltip = document.createElement('div');
       var desc = 'Once you\'ve found a place you want to save, highlight ' +
                  '(text-select) the name or address of the place first';
 
-      var eiffelTowerTooltip = utils.createTooltip('Highlight "Eiffel Tower"', desc,
-        ['bottom-arrow']);
+      var eiffelTowerTooltip = utils.createTooltip('Highlight "Eiffel Tower"',
+        desc, ['bottom-arrow']);
 
 
       eiffelTowerTooltip.style.left = rect.left + 'px';
@@ -66,16 +66,16 @@
           }
 
           popupTooltip = utils.createTooltip('Click MappingBird button',
-            'After highlight the text, hit the MappingBird exntesion you just ' +
-            'installed.');
+            'After highlight the text, hit the MappingBird exntesion you '+
+            'just installed.');
           popupTooltip.style.top = '10px';
           popupTooltip.style.right = '10px';
           document.body.appendChild(popupTooltip);
         }
       });
 
-      chrome.extension.onMessage.addListener(function (request, sender) {
-        if (popupTooltip && request.method == 'getSelection') {
+      chrome.extension.onMessage.addListener(function (request) {
+        if (popupTooltip && request.method === 'getSelection') {
           popupTooltip.parentElement.removeChild(popupTooltip);
           popupTooltip = null;
         }

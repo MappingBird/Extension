@@ -1,5 +1,7 @@
 'use strict';
 
+/* exported utils */
+
 var utils = {
   createTooltip: function (title, desc, classes) {
     var tooltip = document.createElement('div');
@@ -9,4 +11,4 @@ var utils = {
     tooltip.innerHTML = '<h1>' + title + '</h1>' + '<p>' + desc + '</p>';
     return tooltip;
   }
-}
+};
