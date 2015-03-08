@@ -1,5 +1,5 @@
 {
-    "name": "__MSG_appName__",
+    "name": "MappingBird",
     "version": "0.9.5",
     "manifest_version": 2,
     "description": "__MSG_appDescription__",
@@ -27,7 +27,9 @@
                 "http://*/*",
                 "https://*/*"
             ],
-            "css": ["styles/content.css"],
+            "css": [
+                "styles/content.css"
+            ],
             "js": [
                 "scripts/utils.js",
                 "scripts/contentscript.js"
