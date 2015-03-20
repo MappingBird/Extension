@@ -10,6 +10,7 @@
     "default_locale": "en",
     "background": {
         "scripts": [
+            "scripts/async.js",
             "scripts/background.js"
         ]
     },
@@ -18,8 +19,7 @@
             "19": "images/icon-16.png",
             "38": "images/icon-16.png"
         },
-        "default_title": "mappingbird",
-        "default_popup": "popup.html"
+        "default_title": "mappingbird"
     },
     "content_scripts": [
         {
@@ -48,5 +48,11 @@
         "geolocation",
         "cookies",
         "storage"
+    ],
+    "web_accessible_resources": [
+        "popup.html",
+        "styles/*.css",
+        "images/*",
+        "scripts/*"
     ]
 }

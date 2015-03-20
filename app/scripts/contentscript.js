@@ -3,19 +3,49 @@
 /* global utils */
 
 (function() {
+  var popup;
 
-  chrome.extension.onMessage.addListener(function (request) {
-    //Hanlde request based on method
+  function close() {
+    popup.parentElement.removeChild(popup);
+    popup = null;
+  }
+
+  window.addEventListener('message', function(evt) {
+    var request = evt.data;
+    // Handle events from mappingbird.js
+    // get text selection
     if (request.method === 'getSelection') {
-      var msg = document.getSelection().toString();
+      var msg = document.getSelection().toString() || '';
 
       //Send selected text back to popup.html
-      if (msg) {
-        chrome.extension.sendMessage({
-          data: msg
-        });
-      }
+      evt.source.postMessage({
+        method: request.method,
+        data: msg,
+        url: window.location.href
+      }, chrome.extension.getURL(''));
+    // adjust height for difference panels
+    } else if (request.method === 'goto') {
+      popup.className = 'mappingbird-frame ' + request.data;
+    // Close popup
+    } else if (request.method === 'close') {
+      close();
+    }
+  });
 
+  chrome.extension.onMessage.addListener(function (request) {
+    // show popup if receive inject message
+    if (request.method === 'inject') {
+      if (popup) {
+        close();
+      }
+      popup = document.createElement('iframe');
+      popup.className = 'mappingbird-frame';
+      popup.setAttribute('frameBorder', '0');
+      popup.src = chrome.extension.getURL('popup.html');
+      document.body.appendChild(popup);
+      window.setTimeout(function() {
+        popup.classList.add('step1');
+      });
     }
     else {
       chrome.extension.sendMessage({});
