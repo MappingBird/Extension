@@ -18,10 +18,10 @@
           // when loading show, hide all content
           $('.content').css('display', 'none');
 
-          $(el).css('display', 'block');
+          $(el).css('display', 'flex');
           $(close).css('display', 'none');
           if (msg) {
-            $('.loading').html(msg);
+            $('.loading span').html(msg);
           }
         },
         hide: function (showEl) {
@@ -40,6 +40,7 @@
     })();
 
     $('#close_btn').click(function () {
+      window.parent.postMessage({method: 'close'}, '*');
       window.close();
     });
 
@@ -80,14 +81,15 @@
         goToStep1();
       }
     });
-    Service.GetActiveWindow(function (data) {
-      Service.Scraper(data[0].url);
+    Service.GetActiveWindow(function (url) {
+      Service.Scraper(url);
     });
 
     /**
      * step 0 - before step 1
      */
     var goToStep1 = function goToStep1 (isError) {
+      window.parent.postMessage({method: 'goto', data: 'step1'}, '*');
       loading.hide('.content.where');
       $('#searchPlacesInput').focus();
       // new or retry
@@ -100,6 +102,7 @@
      * step 1 - where
      */
     var goToStep2 = function goToStep2 () {
+      window.parent.postMessage({method: 'goto', data: 'step2'}, '*');
       var inputEl = $('#searchPlacesInput');
       var outputEl = $('.content.search');
 
@@ -179,6 +182,7 @@
      * step 2 - search
      */
     var goToStep3 = function goToStep3 () {
+      window.parent.postMessage({method: 'goto', data: 'step3'}, '*');
 
       loading.show('Save...');
 
@@ -239,6 +243,7 @@
         tags: $('#saveCompleteTag').val(),
         description: $('#saveCompleteDescription').val()
       }, function () {
+        window.parent.postMessage({method: 'goto', data: 'step4'}, '*');
         loading.hide('.content.save');
         $('#updateForm').html('<p style="text-align:center;margin:25px 0;"> ' +
           'Place Updated. </p>');
@@ -292,6 +297,7 @@
      * login page
      */
     var goToLogin = function goToLogin() {
+      window.parent.postMessage({method: 'goto', data: 'login'}, '*');
       loading.hide('.content.login');
 
       $('#login_btn').click(function () {
@@ -390,35 +396,27 @@
           // access chrome cookie
           // we will get both domain mappingbird.com www.mappingbird.com but we
           // need mappingbird.com
-          var csrCookie = {domain: 'mappingbird.com',name: 'csrftoken'};
-          chrome.cookies.getAll(csrCookie, function (data) {
-            var csrftoken,
-              sessionid;
-            for (var i = 0; i < data.length; i++) {
-              if (data[i].domain === 'mappingbird.com') {
-                csrftoken = data[i].value;
-                break;
-              }
-            }
-
-            var sessionCookie = {domain: 'mappingbird.com', name: 'sessionid'};
-            chrome.cookies.getAll(sessionCookie, function (data2) {
-
-              for (var j = 0; j < data2.length; j++) {
-                if (data2[j].domain === 'mappingbird.com') {
-                  sessionid = data2[j].value;
-                  break;
-                }
-              }
-
+          var options = {
+            method: 'getCookies',
+            names: ['csrftoken', 'sessionid']
+          };
+          chrome.extension.sendMessage(options);
+          chrome.extension.onMessage.addListener(function(request) {
+            var csrftoken, sessionid;
+            if (request.method === 'getCookies') {
+              csrftoken = request.data[0].filter(function(cookie) {
+                return cookie.domain === 'mappingbird.com';
+              })[0].value;
+              sessionid = request.data[1].filter(function(cookie) {
+                return cookie.domain === 'mappingbird.com';
+              })[0].value;
               $.ajaxSetup({
                 headers: {
                   'X-CSRFToken': csrftoken,
                   'sessionid': sessionid
                 }
               });
-            });
-
+            }
           });
 
           if (fn) {
@@ -427,27 +425,13 @@
         });
     },
     GetActiveWindow: function (fn) {
-      var querystring = {active: true, currentWindow: true};
-      chrome.tabs.query(querystring, function (currentWindow) {
-        Resource.activeWindow = currentWindow[0];
-
-        // get selection text value
-        chrome.tabs.sendMessage(currentWindow[0].id, {
-          method: 'getSelection'
-        });
-
+      window.parent.postMessage({method: 'getSelection'}, '*');
+      window.addEventListener('message', function(evt) {
+        $('#searchPlacesInput').val(Resource.selectionText = evt.data.data);
         if (fn) {
-          fn(currentWindow);
+          fn(evt.data.url);
         }
       });
-
-      chrome.extension.onMessage.addListener(function (response) {
-        $('#searchPlacesInput').val(Resource.selectionText = response.data);
-        //Set text to text area
-        // var text = document.getElementById('text');
-        // text.value = response.data;
-      });
-
     },
     GetPlaces: function (obj, fn) {
       if (!obj.q) {

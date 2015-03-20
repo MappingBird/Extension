@@ -37,3 +37,45 @@
   top: 10px;
   left: 40px;
 }
+
+.mappingbird-frame {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  z-index: 65536;
+  /*background-color: white;*/
+  width: 352px;
+  transition: height 0.2s, transform 0.2s, opacity 0.2s;
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+.mappingbird-frame.step1 {
+  transform: translateY(0);
+  opacity: 1;
+  height: 200px;
+}
+
+.mappingbird-frame.step2 {
+  transform: translateY(0);
+  opacity: 1;
+  height: 600px;
+}
+
+.mappingbird-frame.step3 {
+  transform: translateY(0);
+  opacity: 1;
+  height: 450px;
+}
+
+.mappingbird-frame.step4 {
+  transform: translateY(0);
+  opacity: 1;
+  height: 450px;
+}
+
+.mappingbird-frame.login {
+  transform: translateY(0);
+  opacity: 1;
+  height: 330px;
+}
