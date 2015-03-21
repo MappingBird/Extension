@@ -17,7 +17,7 @@ chrome.extension.onMessage.addListener(function(request) {
     // mappingbird.js.
     var tasks = request.names.map(function(name) {
       return function(done) {
-        var cookies = { domain: 'mappingbird.com', name: name};
+        var cookies = { domain: 'stage.mappingbird.com', name: name};
         chrome.cookies.getAll(cookies, function(data) {
           done(null, data);
         });

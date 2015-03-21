@@ -206,7 +206,7 @@
         // step 3 save ui data
         $('#saveCompleteTitle').html(Resource.selected.name);
         $('#saveCompleteManage').attr('href',
-          'https://mappingbird.com/app#/point/' + Resource.savePointId + '/' +
+          'http://stage.mappingbird.com/app#/point/' + Resource.savePointId + '/' +
           Resource.saveCollection);
         if (Resource.scrapeData.images[0]){
           $('#saveCompletePicture').html(
@@ -386,7 +386,7 @@
       /**
        * Not login, get the user instantly if already login
        */
-      $.get('https://mappingbird.com/api/user/current')
+      $.get('http://stage.mappingbird.com/api/user/current')
         .success(function (data) {
           console.log('[Login]', data);
           Resource.userId = data.id;
@@ -394,8 +394,9 @@
 
 
           // access chrome cookie
-          // we will get both domain mappingbird.com www.mappingbird.com but we
-          // need mappingbird.com
+          // we will get both domain stage.mappingbird.com
+          // www.stage.mappingbird.com but we
+          // need stage.mappingbird.com
           var options = {
             method: 'getCookies',
             names: ['csrftoken', 'sessionid']
@@ -405,10 +406,10 @@
             var csrftoken, sessionid;
             if (request.method === 'getCookies') {
               csrftoken = request.data[0].filter(function(cookie) {
-                return cookie.domain === 'mappingbird.com';
+                return cookie.domain === 'stage.mappingbird.com';
               })[0].value;
               sessionid = request.data[1].filter(function(cookie) {
-                return cookie.domain === 'mappingbird.com';
+                return cookie.domain === 'stage.mappingbird.com';
               })[0].value;
               $.ajaxSetup({
                 headers: {
@@ -437,7 +438,7 @@
       if (!obj.q) {
         obj.q = Resource.activeWindow.title;
       }
-      $.get('https://mappingbird.com/api/places?q=' + encodeURI(obj.q))
+      $.get('http://stage.mappingbird.com/api/places?q=' + encodeURI(obj.q))
         .success(function (data) {
 
           if (fn) {
@@ -463,11 +464,11 @@
        *
        * and also set image
        */
-      $.post('https://mappingbird.com/api/points', obj)
+      $.post('http://stage.mappingbird.com/api/points', obj)
         .success(function (data) {
           console.log(Resource.scrapeData);
           // save image 因為 api 的關係， post /api/images 得獨立發送
-          var imageUrl = 'https://mappingbird.com/api/images';
+          var imageUrl = 'http://stage.mappingbird.com/api/images';
           Resource.scrapeData.images.forEach(function(image, index) {
             if (index < 4) {
               $.post(imageUrl, {point: data.id, url: image});
@@ -491,7 +492,7 @@
        * description: 'something else'
        */
       $.ajax({
-        url: 'https://mappingbird.com/api/points/' + Resource.savePointId,
+        url: 'http://stage.mappingbird.com/api/points/' + Resource.savePointId,
         data: {
           tags: obj.tags,
           description: obj.description,
@@ -506,8 +507,8 @@
         });
     },
     GetTags: function (fn) {
-      // https://www.mappingbird.com/api/tags
-      $.get('https://www.mappingbird.com/api/tags')
+      // https://www.stage.mappingbird.com/api/tags
+      $.get('https://www.stage.mappingbird.com/api/tags')
         .success(function (data) {
           if (data) {
             fn(data);
@@ -516,7 +517,7 @@
     },
     Scraper: function (url, fn) {
       // https://github.com/mariachimike/pingismo/wiki/Backend-API#scraper
-      var scraperUrl = 'https://mappingbird.com/api/scraper?url=' +
+      var scraperUrl = 'http://stage.mappingbird.com/api/scraper?url=' +
                        encodeURIComponent(url);
       $.get(scraperUrl)
         .success(function (data) {
@@ -529,7 +530,7 @@
     },
     SendFeedback: function (obj, fn) {
       // send feedback
-      $.post('https://mappingbird.com/api/feedback', obj)
+      $.post('http://stage.mappingbird.com/api/feedback', obj)
         .success(function (data) {
           if (fn) {
             fn(data);
@@ -539,7 +540,7 @@
     },
     Login: function (obj, fn) {
       // POST /api/user/login
-      $.post('https://mappingbird.com/api/user/login', obj)
+      $.post('http://stage.mappingbird.com/api/user/login', obj)
         .success(function (data) {
           if (fn) {
             fn(data);
@@ -548,7 +549,7 @@
     },
     Signup: function (obj, fn) {
       // POST /api/users
-      $.post('https://mappingbird.com/api/users', obj)
+      $.post('http://stage.mappingbird.com/api/users', obj)
         .success(function (data) {
           if (fn) {
             fn(data);
