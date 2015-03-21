@@ -1,4 +1,4 @@
-// Generated on 2014-11-14 using generator-chrome-extension 0.2.11
+// Generated on 2015-03-21 using generator-chrome-extension 0.3.1
 'use strict';
 
 // # Globbing
@@ -36,7 +36,7 @@ module.exports = function (grunt) {
         files: ['<%= config.app %>/scripts/{,*/}*.js'],
         tasks: ['jshint'],
         options: {
-          livereload: true
+          livereload: '<%= connect.options.livereload %>'
         }
       },
       gruntfile: {
@@ -46,7 +46,7 @@ module.exports = function (grunt) {
         files: ['<%= config.app %>/styles/{,*/}*.css'],
         tasks: [],
         options: {
-          livereload: true
+          livereload: '<%= connect.options.livereload %>'
         }
       },
       livereload: {
@@ -263,6 +263,7 @@ module.exports = function (grunt) {
       dist: {
         options: {
           buildnumber: true,
+          indentSize: 2,
           background: {
             target: 'scripts/background.js',
             exclude: [
@@ -281,7 +282,7 @@ module.exports = function (grunt) {
         options: {
           archive: function() {
             var manifest = grunt.file.readJSON('app/manifest.json');
-            return 'package/mappingbird-' + manifest.version + '.zip';
+            return 'package/MappingBird-' + manifest.version + '.zip';
           }
         },
         files: [{

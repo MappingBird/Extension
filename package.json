@@ -1,7 +1,6 @@
 {
   "name": "mappingbird",
-  "version": "1.0.0",
-  "description": "Have you ever tried to remember places that you came across while on Facebook, blogs, or news articles? Or maybe while chatting with friends?",
+  "version": "0.0.0",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",

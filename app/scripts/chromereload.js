@@ -4,15 +4,12 @@
 // The reload client has a compatibility with livereload.
 // WARNING: only supports reload command.
 
-/* global WebSocket */
-
 var LIVERELOAD_HOST = 'localhost:';
 var LIVERELOAD_PORT = 35729;
-var connection = new WebSocket('ws://' + LIVERELOAD_HOST + LIVERELOAD_PORT +
-    '/livereload');
+var connection = new WebSocket('ws://' + LIVERELOAD_HOST + LIVERELOAD_PORT + '/livereload');
 
 connection.onerror = function (error) {
-  console.log('reload connection got error' + JSON.stringify(error));
+  console.log('reload connection got error:', error);
 };
 
 connection.onmessage = function (e) {
