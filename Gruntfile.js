@@ -292,6 +292,26 @@ module.exports = function (grunt) {
           dest: ''
         }]
       }
+    },
+
+    replace: {
+      production: {
+        src: [
+          '<%= config.dist %>/**/*.html',
+          '<%= config.dist %>/**/*.js'
+        ],
+        overwrite: true,
+        replacements: [
+          {
+            from: 'http://stage.mappingbird.com',
+            to: 'https://mappingbird.com'
+          },
+          {
+            from: 'stage.mappingbird.com',
+            to: 'mappingbird.com'
+          }
+        ]
+      }
     }
   });
 
@@ -309,7 +329,7 @@ module.exports = function (grunt) {
     'mocha'
   ]);
 
-  grunt.registerTask('build', [
+  var buildDeps = [
     'clean:dist',
     'chromeManifest:dist',
     'useminPrepare',
@@ -318,9 +338,14 @@ module.exports = function (grunt) {
     'concat',
     'uglify',
     'copy',
-    'usemin',
-    'compress'
-  ]);
+    'usemin'
+  ];
+
+  if (process.env.NODE_ENV === 'production') {
+    buildDeps.push('replace');
+  }
+  buildDeps.push('compress');
+  grunt.registerTask('build', buildDeps);
 
   grunt.registerTask('default', [
     'jshint',
