@@ -374,7 +374,7 @@
     userEmail: '',
     token: '',
     selectionText: '',
-    activeWindow: '',
+    activeWindow: {},
     scrapeData: '',
     selected: {},
     savePointId: null,
@@ -428,9 +428,15 @@
     GetActiveWindow: function (fn) {
       window.parent.postMessage({method: 'getSelection'}, '*');
       window.addEventListener('message', function(evt) {
-        $('#searchPlacesInput').val(Resource.selectionText = evt.data.data);
-        if (fn) {
-          fn(evt.data.url);
+        if (evt.data.method === 'getSelection') {
+          Resource.activeWindow = {
+            url: evt.data.url,
+            title: evt.data.title
+          };
+          $('#searchPlacesInput').val(Resource.selectionText = evt.data.data);
+          if (fn) {
+            fn(evt.data.url);
+          }
         }
       });
     },
