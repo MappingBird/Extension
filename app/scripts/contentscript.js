@@ -21,7 +21,8 @@
       evt.source.postMessage({
         method: request.method,
         data: msg,
-        url: window.location.href
+        url: window.location.href,
+        title: document.title
       }, chrome.extension.getURL(''));
     // adjust height for difference panels
     } else if (request.method === 'goto') {
