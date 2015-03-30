@@ -79,3 +79,9 @@
   opacity: 1;
   height: 330px;
 }
+
+.mappingbird-frame.error {
+  transform: translateY(0);
+  opacity: 1;
+  height: 300px;
+}

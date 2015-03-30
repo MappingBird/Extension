@@ -269,6 +269,7 @@
      * error page
      */
     var goToError = function goToError() {
+      window.parent.postMessage({method: 'goto', data: 'error'}, '*');
       loading.hide('.content.error');
     };
 
