@@ -277,6 +277,7 @@
      * feedback page
      */
     var goToFeedback = function goToFeedback() {
+      window.parent.postMessage({method: 'goto', data: 'feedback'}, '*');
       loading.hide('.content.feedback');
     };
 
