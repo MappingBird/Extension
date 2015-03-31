@@ -55,8 +55,8 @@
     });
 
     $('.signup').click(function () {
-      goToSignup();
-      return false;
+      $('#close_btn').click();
+      return true;
     });
     $('.loginBtn').click(function () {
       goToLogin();
@@ -328,42 +328,6 @@
         $('#loginEmail,#loginPassword').addClass('errorStyle');
         $('#login_btn').addClass('errorStyle');
       };
-    };
-
-    /*
-     * signup page
-     */
-    var goToSignup = function goToSignup() {
-      loading.hide('.content.signup');
-    };
-    $('#signup_btn').click(function () {
-      if (!$('#signupEmail').val() || !$('#signupPassword1').val() ||
-          !$('#signupPassword2').val()) {
-        signUpinputError();
-        return false;
-      }
-      // Signup
-      loading.show('Signup...');
-      Service.Signup({
-        email: $('#signupEmail').val(),
-        password: $('#signupPassword1').val()
-      },
-      function (data) {
-        if (data.email) {
-          goToLogin();
-        } else if (data.error) {
-          loading.hide('.content.signup');
-          signUpinputError();
-        }
-      });
-      return false;
-    });
-
-    var signUpinputError = function inputError () {
-      // error ui
-      $('#signupEmail,#signupPassword1,#signupPassword2')
-        .addClass('errorStyle');
-      $('#signup_btn').addClass('errorStyle');
     };
   }
 );
