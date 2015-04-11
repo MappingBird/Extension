@@ -407,10 +407,11 @@
       });
     },
     GetPlaces: function (obj, fn) {
+      var url = Resource.activeWindow.url;
       if (!obj.q) {
         obj.q = Resource.activeWindow.title;
       }
-      $.get('http://stage.mappingbird.com/api/places?q=' + encodeURI(obj.q))
+      $.get('http://stage.mappingbird.com/api/places?q=' + encodeURI(obj.q) +'&url=' + encodeURI(url))
         .success(function (data) {
 
           if (fn) {
