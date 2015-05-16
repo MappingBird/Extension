@@ -7,7 +7,7 @@
     var searchTooltip, doneTooltip;
 
     /**
-     * share js
+     * share js for displaying message while transition animation shows
      */
     var loading = (function loading () {
       var el = $('.loading'),
@@ -39,25 +39,32 @@
       };
     })();
 
+    // when close button is clicked
     $('#close_btn').click(function () {
       window.parent.postMessage({method: 'close'}, '*');
       window.close();
     });
 
+    // when "cannot_find_link" link is clicked
     $('.tryagain').click(function () {
       $('.content').css('display', 'none');
+      $('.content.search .search-header').remove();
       $('.content.search .item').remove();
       goToStep1(true);
     });
 
+    // when feedback button is clicked
     $('.feedback').click(function () {
       goToFeedback();
     });
 
+    // when signup button is clicked
     $('.signup').click(function () {
       $('#close_btn').click();
       return true;
     });
+
+    // when login button is clicked
     $('.loginBtn').click(function () {
       goToLogin();
       return false;
@@ -68,9 +75,9 @@
     });
 
     /**
-     * init extension
+     * init extension dialog
      */
-    loading.show('Login...');
+    loading.show(chrome.i18n.getMessage('strLoggingin'));
     Service.GetCurrentUser(function (data) {
       console.log('[Login] ', data);
       if (!data.id || !data.email) {
@@ -94,8 +101,9 @@
       $('#searchPlacesInput').focus();
       // new or retry
       $('#whereHeader').html((isError ?
-        'Try another search words or use address directly.' :
-        'Where are you going to bookmark?'));
+        chrome.i18n.getMessage('tryanotherDescription') :
+        chrome.i18n.getMessage('whereDescription')));
+      $('#visit_mappingbird_link').text(chrome.i18n.getMessage('strVisitMappingBird'));
     };
 
     /**
@@ -106,7 +114,7 @@
       var inputEl = $('#searchPlacesInput');
       var outputEl = $('.content.search');
 
-      loading.show('Searching...');
+      loading.show( chrome.i18n.getMessage('strLocating') + '<b>' + $(inputEl).val() + '</b>...');
 
       Service.GetPlaces({q: $(inputEl).val()}, function (data) {
         var outputHtml ='';
@@ -120,11 +128,19 @@
         var places = data.places.filter(function(place, index) {
           return index < 10;
         });
+        outputHtml = '<div class="search-header"><p>' + chrome.i18n.getMessage('strSearchResultTitle') + '</p>' + places.length + chrome.i18n.getMessage('strSearchResultDescription') + '</div>';
         places.forEach(function(place) {
           outputHtml += generatePlaceTemplate(place);
         });
 
         $(outputEl).prepend(outputHtml);
+        $('#cannot_find_link').text(chrome.i18n.getMessage('strCannotFind'));
+        $('#save').text(chrome.i18n.getMessage('strSaveBtn'));
+
+        // adjust position for close button if the scroll is displayed
+        if(places.length > 2){
+          $('#close_btn').addClass('adjust-for-scrollbar');
+        }
 
         // focus first item
         var firstEl = $('.content.search').find('.item')[0];
@@ -141,8 +157,8 @@
           var firstRun = items.firstRun;
           var place = $('#searchPlacesInput').val();
           if (firstRun && place.indexOf('Eiffel Tower') !== -1) {
-            searchTooltip = utils.createTooltip('Save Eiffel Tower',
-              'After confirming which oen to save, click "Save"',
+            searchTooltip = utils.createTooltip(chrome.i18n.getMessage('tipSaveTitle'),
+              chrome.i18n.getMessage('tipSaveDescription'),
               ['bottom-arrow', 'popup']);
             $('.footer').append(searchTooltip);
           }
@@ -153,6 +169,7 @@
     $('#searchForm').submit(function(event) {
       if(!$('#searchPlacesInput').val()) {
         $('.content.where').addClass('showError');
+        $('.content.where .warningMessage').text(chrome.i18n.getMessage('errEmptyNameorAddress'));
       } else {
         goToStep2();
       }
@@ -184,7 +201,7 @@
     var goToStep3 = function goToStep3 () {
       window.parent.postMessage({method: 'goto', data: 'step3'}, '*');
 
-      loading.show('Save...');
+      loading.show(chrome.i18n.getMessage('strSaving'));
 
       Service.SavePoints({
         'title': Resource.activeWindow.title,
@@ -203,8 +220,13 @@
         console.log('[Save] ', data);
         loading.hide('.content.save');
 
+        // remove postion adjustment for close button
+        $('#close_btn').removeClass('adjust-for-scrollbar');
+
         // step 3 save ui data
-        $('#saveCompleteTitle').html(Resource.selected.name);
+        $('#saveCompleteTitle').text(Resource.selected.name);
+        $('#saveCompleteStatus').text(chrome.i18n.getMessage('strPlaceSavedStatus'));
+        $('#saveCompleteManage').text(chrome.i18n.getMessage('strManagePlace'));
         $('#saveCompleteManage').attr('href',
           'http://stage.mappingbird.com/app#/point/' + Resource.savePointId + '/' +
           Resource.saveCollection);
@@ -215,15 +237,16 @@
         } else if (data.images[0]) {
           $('#saveCompletePicture').attr('src', data.images[0].url);
         }
+        $('#saveCompleteDescription').attr('placeholder', chrome.i18n.getMessage('pholdSavedPlaceDescription'));
+        $('#update').text(chrome.i18n.getMessage('strUpdateBtn'));
 
       });
 
       if (searchTooltip) {
         searchTooltip.parentElement.remove(searchTooltip);
         searchTooltip = null;
-        doneTooltip = utils.createTooltip('Awesome! Place saved',
-          'That\'s it. Now you can decide whether to update tags, ' +
-          'comments or not', ['bottom-arrow', 'done']);
+        doneTooltip = utils.createTooltip(chrome.i18n.getMessage('tipDoneTitle'),
+          chrome.i18n.getMessage('tipDoneDescription'), ['bottom-arrow', 'done']);
         $('.content.save').prepend(doneTooltip);
       }
 
@@ -271,6 +294,11 @@
     var goToError = function goToError() {
       window.parent.postMessage({method: 'goto', data: 'error'}, '*');
       loading.hide('.content.error');
+      $('#errTitle').text(chrome.i18n.getMessage('strErrorTitle'));
+      $('#errDescription').text(chrome.i18n.getMessage('strErrorDescription'));
+      $('#btnTryAgain').text(chrome.i18n.getMessage('strTryAgainBtn'));
+      $('#btnFeedback').text(chrome.i18n.getMessage('strFeedbackBtn'));
+
     };
 
   /**
@@ -279,6 +307,10 @@
     var goToFeedback = function goToFeedback() {
       window.parent.postMessage({method: 'goto', data: 'feedback'}, '*');
       loading.hide('.content.feedback');
+      $('#feedback_title').text(chrome.i18n.getMessage('strFeedbackTitle'));
+      $('#feedbackMessage').attr('placeholder', chrome.i18n.getMessage('pholdFeedbackField'));
+      $('#feedback_btn').text(chrome.i18n.getMessage('strFeedBackGo'));
+
     };
 
     $('#feedback_btn').click(function () {
@@ -301,6 +333,9 @@
     var goToLogin = function goToLogin() {
       window.parent.postMessage({method: 'goto', data: 'login'}, '*');
       loading.hide('.content.login');
+      $('#login_header').text(chrome.i18n.getMessage('strLoginHeader'));
+      $('#login_btn').text(chrome.i18n.getMessage('strLoginBtn'));
+      $('#signup_btn').text(chrome.i18n.getMessage('strSignupBtn'));
 
       $('#login_btn').click(function () {
         if (!$('#loginEmail').val() || !$('#loginPassword').val()) {
@@ -308,7 +343,7 @@
           return;
         }
         // login
-        loading.show('Login...');
+        loading.show(chrome.i18n.getMessage('strLoggingin'));
         Service.Login({
           email: $('#loginEmail').val(),
           password: $('#loginPassword').val()

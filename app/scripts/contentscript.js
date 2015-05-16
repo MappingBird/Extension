@@ -77,10 +77,9 @@
       var popupTooltip;
       var h1 = document.querySelector('h1.copy--h1');
       var rect = h1.getBoundingClientRect();
-      var desc = 'Once you\'ve found a place you want to save, highlight ' +
-                 '(text-select) the name or address of the place first';
+      var desc = chrome.i18n.getMessage('tipHighlightDescription');
 
-      var eiffelTowerTooltip = utils.createTooltip('Highlight "Eiffel Tower"',
+      var eiffelTowerTooltip = utils.createTooltip(chrome.i18n.getMessage('tipHighlightTitle'),
         desc, ['bottom-arrow']);
 
 
@@ -96,9 +95,8 @@
             eiffelTowerTooltip = null;
           }
 
-          popupTooltip = utils.createTooltip('Click MappingBird button',
-            'After highlight the text, hit the MappingBird exntesion you '+
-            'just installed.');
+          popupTooltip = utils.createTooltip(chrome.i18n.getMessage('tipClickTitle'),
+            chrome.i18n.getMessage('tipClickDescription'));
           popupTooltip.style.top = '10px';
           popupTooltip.style.right = '10px';
           document.body.appendChild(popupTooltip);

@@ -1,10 +1,143 @@
 {
   "appName": {
     "message": "Save to MappingBird",
-    "description": "Save to MappingBird"
+    "description": "Extension name."
   },
   "appDescription": {
-    "message": "Save to MappingBird",
-    "description": "Description: Use Save to MappingBird to save places you find on the web into your MappingBird account. If you're reading an article about, say, a great café in Rome, just select the name of the café in the article and click the Save to MappingBird button to save it to your MappingBird account."
+    "message": "Use [Save to MappingBird] to save places you find on any webpage.",
+    "description": "Extension description."
+  },
+  "strLoggingin": {
+  	"message": "Logging in...",
+  	"description": "Status when logging in or checking login status.'"
+  },
+  "whereDescription": {
+  	"message": "Where are you going to bookmark?",
+  	"description": "Description on the first screen to request place name or address for searching."
+  },
+  "tryanotherDescription": {
+  	"message": "Try another search words or use address directly.",
+  	"description": "Description on the search screen after users click 'cannot find the place.'"
+  },
+  "errEmptyNameorAddress": {
+  	"message": "Please enter name or address.",
+  	"description": "Error message when Go is triggerred without providing name or address.'"
+  },
+  "strVisitMappingBird": {
+  	"message": "Visit MappingBird.com",
+  	"description": "Label of link to MappingBird.com'"
+  },
+  "strLocating": {
+  	"message": "Locating ",
+  	"description": "Status when locating a name or address."
+  },
+  "strSearchResultTitle": {
+    "message": "Choose a location to save",
+    "description": "Title on search result page after clicking on Go with name or address.'"
+  },
+  "strSearchResultDescription": {
+  	"message": " venues found",
+  	"description": "Description on search result page after clicking on Go with name or address.'"
+  },
+  "strCannotFind": {
+  	"message": "Cannot find the place?",
+  	"description": "Label of link when users cannot find the places after searching.'"
+  },
+  "strSaveBtn": {
+  	"message": "Save",
+  	"description": "Label of button for saving place.'"
+  },
+  "strSaving": {
+  	"message": "Saving...",
+  	"description": "Status when saving a name or address."
+  },
+  "strPlaceSavedStatus": {
+  	"message": " has been saved.",
+  	"description": "Status when a name or address is saved."
+  },
+  "strManagePlace": {
+  	"message": "Manage saved places",
+  	"description": "Label of link after place has been saved."
+  },
+  "pholdSavedPlaceDescription": {
+  	"message": "More about this place...",
+  	"description": "Placeholder of textfield for the saved place description."
+  },
+  "strUpdateBtn": {
+  	"message": "Update",
+  	"description": "Label of button for updating place information."
+  },
+  "strErrorTitle": {
+    "message": "OOPS.",
+    "description": "Title for the error page."
+  },
+  "strErrorDescription": {
+    "message": "We are so sorry that we might have broken something. Please try again or tell us how to help you.",
+    "description": "Description for the error page."
+  },
+  "strTryAgainBtn": {
+    "message": "Try Again",
+    "description": "Label for try again button on error page."
+  },
+  "strFeedbackBtn": {
+    "message": "Feedback",
+    "description": "Label for feedback button on error page."
+  },
+  "strFeedbackTitle": {
+    "message": "Feedback",
+    "description": "Title for feedback page."
+  },
+  "pholdFeedbackField": {
+    "message": "How can we help you",
+    "description": "Placeholder of textfield for feedback field."
+  },
+  "strFeedBackGo": {
+    "message": "Go",
+    "description": "Label for feedback submit button."
+  },
+  "strLoginHeader": {
+    "message": "Log In",
+    "description": "Title for login page."
+  },
+  "strLoginBtn": {
+    "message": "Log In",
+    "description": "Label for login button."
+  },
+  "strSignupBtn": {
+    "message": "Sign up to start your collections >",
+    "description": "Label for signup link."
+  },
+  //Tooltips messages
+  "tipHighlightTitle": {
+    "message": "Highlight \"Eiffel Tower\"",
+    "description": "Title for Highlight tooltip."
+  },
+  "tipHighlightDescription": {
+    "message": "Once you've found a place you want to save, highlight (text-select) the name or address of the place first.",
+    "description": "Description for Highlight tooltip."
+  },
+  "tipClickTitle": {
+    "message": "Click MappingBird button",
+    "description": "Title for Click tooltip."
+  },
+  "tipClickDescription": {
+    "message": "After highlight the text, hit the MappingBird exntesion you just installed.",
+    "description": "Description for Click tooltip."
+  },
+  "tipSaveTitle": {
+    "message": "Save Eiffel Tower",
+    "description": "Title for Save tooltip."
+  },
+  "tipSaveDescription": {
+    "message": "After confirming which one to save from the list above, click [Save].",
+    "description": "Description for Save tooltip."
+  },
+  "tipDoneTitle": {
+    "message": "Awesome! Place saved",
+    "description": "Title for Done tooltip."
+  },
+  "tipDoneDescription": {
+    "message": "That's it. Now you can decide whether to update tags, comments or not.",
+    "description": "Description for Done tooltip."
   }
 }

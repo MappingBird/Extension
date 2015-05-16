@@ -27,7 +27,7 @@
     <input type="submit" id="searching" class="go_btn" href="#" value="Go"></input>
   </form>
   <hr/>
-  <a class="link" href="http://stage.mappingbird.com" target="_blank">Visit MappingBird</a>
+  <a class="link" href="http://stage.mappingbird.com" target="_blank" id="visit_mappingbird_link">Visit MappingBird</a>
 </div>
 <!-- end of step 1 - where -->
 
@@ -59,7 +59,7 @@
   </div>
   !-->
 
-  <a href="#" class="link tryagain">
+  <a href="#" class="link tryagain" id="cannot_find_link">
     Cannot find the place?
   </a>
   <div class="footer">
@@ -74,7 +74,7 @@
     <!--<img id="saveCompletePicture" src="./images/demo.png"/>-->
   </div>
   <p class="header">
-    <span id="saveCompleteTitle" class="title">Eiffel Tower</span> Saved
+    <span id="saveCompleteTitle" class="title">Eiffel Tower</span> <span id="saveCompleteStatus">Saved</span>
   </p>
   <a id="saveCompleteManage" class="manage" href="http://stage.mappingbird.com/app" target="_blank">
     Manage saved places
@@ -95,19 +95,19 @@
     <img src="./images/extension_oops.jpg"/>
   </div>
   <div>
-    <p class="title">OOPS.</p>
-    <p class="description">We are sorry about failing to do what you wanna do. Please try again or tell us how to help you.</p>
+    <p id="errTitle" class="title">OOPS.</p>
+    <p id="errDescription" class="description">We are sorry about failing to do what you wanna do. Please try again or tell us how to help you.</p>
   </div>
   <div class="button">
-    <a href="#" class="tryagain">Try Again</a>
-    <a href="#" class="feedback">Feedback</a>
+    <a href="#" class="tryagain" id="btnTryAgain">Try Again</a>
+    <a href="#" class="feedback" id="btnFeedback">Feedback</a>
   </div>
 </div>
 <!-- end of error 500 page -->
 
 <!-- feedback form page -->
 <div class="content feedback">
-  <p class="header">Feedback</p>
+  <p class="header" id="feedback_title">Feedback</p>
   <hr/>
   <form>
     <input id="feedbackEmail" class="input1" type="text" placeholder="Email"/>
@@ -119,14 +119,14 @@
 
 <!-- login page -->
 <div class="content login">
-  <p class="header">Log In</p>
+  <p class="header" id="login_header">Log In</p>
   <hr/>
   <form>
     <input id="loginEmail" class="input1" type="text" placeholder="Email" autofocus/>
     <input id="loginPassword" class="input2" type="password" placeholder="Password"/>
     <a id="login_btn" class="go_btn" href="#">Log In</a>
     <hr/>
-    <a href="http://stage.mappingbird.com/signup" target="_blank" class="signup">Sign Up ></a>
+    <a href="http://stage.mappingbird.com/signup" target="_blank" class="signup" id="signup_btn">Sign Up ></a>
   </form>
 </div>
 <!-- end of login page -->
@@ -148,7 +148,7 @@
 
 <!-- share layout -->
 <a id="close_btn" href="#">
-  <img src="./images/extension_icon_close.png"/>
+  <!--img src="./images/extension_icon_close.png"/-->
 </a>
 <!-- end of share layout -->
 
