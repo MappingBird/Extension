@@ -10,6 +10,14 @@
     popup = null;
   }
 
+  function sortImages(a,b){
+    if(a.width*a.height < b.width*b.height)
+      {return 1;}
+    if(a.width*a.height > b.width*b.height)
+      {return -1;}
+    return 0;
+  }
+
   window.addEventListener('message', function(evt) {
     var request = evt.data;
     // Handle events from mappingbird.js
@@ -17,10 +25,25 @@
     if (request.method === 'getSelection') {
       var msg = document.getSelection().toString() || '';
 
-      //Send selected text back to popup.html
+      //Get images of the page
+      var imgs = document.getElementsByTagName('img');
+      var imgList = [];
+      for(var i=0; i < imgs.length; i++){
+        if(imgs[i].height > 160 && imgs[i].width > 160){
+          imgList.push({
+            src: imgs[i].src,
+            height: imgs[i].height,
+            width: imgs[i].width
+          });
+        }
+      }
+      imgList.sort(sortImages);
+
+      //Send selected text and images back to popup.html
       evt.source.postMessage({
         method: request.method,
         data: msg,
+        images: imgList,
         url: window.location.href,
         title: document.title
       }, chrome.extension.getURL(''));
@@ -36,9 +59,11 @@
   chrome.extension.onMessage.addListener(function (request) {
     // show popup if receive inject message
     if (request.method === 'inject') {
+      // clear revious popup content if popup already exists
       if (popup) {
         close();
       }
+      // initiate popup
       popup = document.createElement('iframe');
       popup.className = 'mappingbird-frame';
       popup.setAttribute('frameBorder', '0');

@@ -48,8 +48,16 @@
   	"description": "Label of button for saving place.'"
   },
   "strSaving": {
-  	"message": "Saving...",
+  	"message": "Saving place info...",
   	"description": "Status when saving a name or address."
+  },
+  "strSavingImage": {
+    "message": "Saving images...",
+    "description": "Status when saving a name or address."
+  },
+  "strUpdating": {
+    "message": "Updating...",
+    "description": "Status when updating tags or comments."
   },
   "strPlaceSavedStatus": {
   	"message": " has been saved.",
@@ -63,9 +71,29 @@
   	"message": "More about this place...",
   	"description": "Placeholder of textfield for the saved place description."
   },
+  "strEditPhotosBtn":{
+    "message":"Edit Photos",
+    "description": "Label of button for selected saved photos."
+  },
+  "strEditPhotosHeader":{
+    "message":" photos are selected",
+    "description": "Header for select photos dialog."
+  },
+  "strEditPhotosDone":{
+    "message":"Done",
+    "description": "Label of button for completing edit photos."
+  },
   "strUpdateBtn": {
   	"message": "Update",
   	"description": "Label of button for updating place information."
+  },
+  "strUpdateTitle": {
+    "message": "Update completed.",
+    "description": "Title on the page after tags or comments are updated."
+  },
+  "strViewSavedPlace": {
+    "message": "Check it on MappingBird",
+    "description": "Lable of link for checking saved place."
   },
   "strErrorTitle": {
     "message": "OOPS.",

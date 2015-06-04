@@ -65,13 +65,25 @@
 .mappingbird-frame.step3 {
   transform: translateY(0);
   opacity: 1;
-  height: 450px;
+  height: 350px;
+}
+
+.mappingbird-frame.addcomments {
+  transform: translateY(0);
+  opacity: 1;
+  height: 520px;
+}
+
+.mappingbird-frame.selectPhotos{
+  transform: translateY(0);
+  opacity: 1;
+  height: 600px;
 }
 
 .mappingbird-frame.step4 {
   transform: translateY(0);
   opacity: 1;
-  height: 450px;
+  height: 200px;
 }
 
 .mappingbird-frame.login {

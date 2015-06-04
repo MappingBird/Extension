@@ -13,12 +13,12 @@
 </head>
 <body>
 <div class="container">
-<div class="loading">
+<div class="content loading">
   <img src="images/loading.gif">
   <span>Searching...</span>
 </div>
 
-<!-- step 1 - where -->
+<!-- step 1 - where to save -->
 <div class="content where">
   <p id="whereHeader" class="header">Where are you going to bookmark?</p>
   <p class="warningMessage">Please enter name or address.</p>
@@ -29,65 +29,75 @@
   <hr/>
   <a class="link" href="http://stage.mappingbird.com" target="_blank" id="visit_mappingbird_link">Visit MappingBird</a>
 </div>
-<!-- end of step 1 - where -->
+<!-- end of step 1 - where to save -->
 
-<!-- step 2 - search -->
+<!-- step 2 - search result -->
 <div class="content search">
-  <!--
-  <div class="item active">
-
-    <p class="title">
-      Eiffel Tower
-    </p>
-    <p class="description">
-      Champ de Mars, 5 Avenue, Anatole France, 75007 Paris, France
-    </p>
-
-    <hr/>
-
+  <div class="search-header">
+    <p>Choose one to save</p>
+    <span>10 venues found</span>
   </div>
-  <div class="item">
-
-    <p class="title">
-      Eiffel Tower Hostel
-    </p>
-    <p class="description">
-      Champ de Mars, 5 Avenue, Anatole France, 75007 Paris, France
-    </p>
-    <hr/>
-
+  <div class="search-result">
+    <a href="#" class="link tryagain" id="cannot_find_link">
+      Cannot find the place?
+    </a>
   </div>
-  !-->
-
-  <a href="#" class="link tryagain" id="cannot_find_link">
-    Cannot find the place?
-  </a>
   <div class="footer">
     <a id="save" class="save_btn" href="#">save</a>
   </div>
 </div>
-<!-- end of step 2 - where -->
+<!-- end of step 2 - search result -->
 
-<!-- step 3 - save -->
+<!-- step 3 - save completed -->
 <div class="content save">
   <div class="picture" id="saveCompletePicture">
-    <!--<img id="saveCompletePicture" src="./images/demo.png"/>-->
+    <ul id="saveHeaderImage"></ul>
+    <div class="pic_actions">
+      <a href="#" class="pre_pic"></a>
+      <a href="#" class="edit_pic" id="btnEditPhotos">Edit Photos</a>
+      <a href="#" class="next_pic"></a>
+    </div>
   </div>
+  <img class="save_complete_icon" src="./images/blue_check_mark.png" />
   <p class="header">
     <span id="saveCompleteTitle" class="title">Eiffel Tower</span> <span id="saveCompleteStatus">Saved</span>
   </p>
-  <a id="saveCompleteManage" class="manage" href="http://stage.mappingbird.com/app" target="_blank">
-    Manage saved places
-  </a>
   <hr/>
   <form id="updateForm">
   <!--<input id="saveCompleteTag" class="input1" type="text" placeholder="Add tag"/> -->
   <textarea id="saveCompleteDescription" class="input2" type="text" placeholder="What would you say about this place..."></textarea>
   <a id="update" class="update_btn" href="#">Update</a>
   </form>
-
+  <a id="saveCompleteManage" class="manage" href="http://stage.mappingbird.com/app" target="_blank">
+    Manage saved places
+  </a>
 </div>
-<!-- end of step 3 - save -->
+<!-- end of step 3 - save completed -->
+
+<!-- select photos -->
+<div class="content photos">
+  <div class="header">
+    <p id="strEditPhotoHeader"><span class="numSelected">4</span>/<span class="numTotal">21</span><span class="strHeader"> photos are selected<span></p>
+  </div>
+  <div class="photo-list">
+    <ul id="selectPhotoList"></ul>
+    <div class="clear"></div>
+  </div>
+  <div class="footer">
+    <a id="doneSelectPhotos" class="done_btn" href="#">Done</a>
+  </div>
+</div>
+<!-- end of select photos -->
+
+<!-- step 4 - update completed -->
+<div class="content update">
+  <img class="update_complete_icon" src="./images/blue_check_mark.png" />
+  <p class="header">Update completed.</p>
+  <a id="viewSavedPlace" class="view" href="http://stage.mappingbird.com/app" target="_blank">
+    Check it on MappingBird
+  </a>
+</div>
+<!-- end of step 4 - update completed -->
 
 <!-- error 500 page -->
 <div class="content error">

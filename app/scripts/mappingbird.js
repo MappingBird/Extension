@@ -32,7 +32,7 @@
           $('.errorStyle').removeClass('.errorStyle');
           // show the specific element
           if (showEl) {
-            $('.content').css('display', 'none');
+            $('.content').css('display', 'none'); //hide all steps content
             $(showEl).css('display', 'block');
           }
         }
@@ -48,7 +48,6 @@
     // when "cannot_find_link" link is clicked
     $('.tryagain').click(function () {
       $('.content').css('display', 'none');
-      $('.content.search .search-header').remove();
       $('.content.search .item').remove();
       goToStep1(true);
     });
@@ -78,6 +77,8 @@
      * init extension dialog
      */
     loading.show(chrome.i18n.getMessage('strLoggingin'));
+
+    //Check if user has logged in
     Service.GetCurrentUser(function (data) {
       console.log('[Login] ', data);
       if (!data.id || !data.email) {
@@ -88,16 +89,22 @@
         goToStep1();
       }
     });
+
+    //Get selected text and prefill to name/address field
     Service.GetActiveWindow(function (url) {
+      //Get web page data by URL
       Service.Scraper(url);
+
+      // ensure the images are recieved
+      console.log(Resource.activeWindow.images);
     });
 
     /**
-     * step 0 - before step 1
+     * step 1 - display "where are you going to remember"
      */
     var goToStep1 = function goToStep1 (isError) {
-      window.parent.postMessage({method: 'goto', data: 'step1'}, '*');
-      loading.hide('.content.where');
+      window.parent.postMessage({method: 'goto', data: 'step1'}, '*'); //show iframe and set its size
+      loading.hide('.content.where'); //hide transition page and display .content.where
       $('#searchPlacesInput').focus();
       // new or retry
       $('#whereHeader').html((isError ?
@@ -107,12 +114,12 @@
     };
 
     /**
-     * step 1 - where
+     * step 2 - display search result
      */
     var goToStep2 = function goToStep2 () {
-      window.parent.postMessage({method: 'goto', data: 'step2'}, '*');
+      window.parent.postMessage({method: 'goto', data: 'step2'}, '*'); //set iframe's size
       var inputEl = $('#searchPlacesInput');
-      var outputEl = $('.content.search');
+      var outputEl = $('.content.search .search-result');
 
       loading.show( chrome.i18n.getMessage('strLocating') + '<b>' + $(inputEl).val() + '</b>...');
 
@@ -128,7 +135,8 @@
         var places = data.places.filter(function(place, index) {
           return index < 10;
         });
-        outputHtml = '<div class="search-header"><p>' + chrome.i18n.getMessage('strSearchResultTitle') + '</p>' + places.length + chrome.i18n.getMessage('strSearchResultDescription') + '</div>';
+        $('.content.search .search-header p').text(chrome.i18n.getMessage('strSearchResultTitle'));
+        $('.content.search .search-header span').text(places.length + chrome.i18n.getMessage('strSearchResultDescription'));
         places.forEach(function(place) {
           outputHtml += generatePlaceTemplate(place);
         });
@@ -136,11 +144,6 @@
         $(outputEl).prepend(outputHtml);
         $('#cannot_find_link').text(chrome.i18n.getMessage('strCannotFind'));
         $('#save').text(chrome.i18n.getMessage('strSaveBtn'));
-
-        // adjust position for close button if the scroll is displayed
-        if(places.length > 2){
-          $('#close_btn').addClass('adjust-for-scrollbar');
-        }
 
         // focus first item
         var firstEl = $('.content.search').find('.item')[0];
@@ -166,6 +169,7 @@
       });
     };
 
+    // Start to searching for place
     $('#searchForm').submit(function(event) {
       if(!$('#searchPlacesInput').val()) {
         $('.content.where').addClass('showError');
@@ -176,6 +180,7 @@
       event.preventDefault();
     });
 
+    // Create item template for search result page
     var generatePlaceTemplate = function generatePlaceTemplate (data) {
       var output = ['<div class="item"">', // active
       '<p class="title">',
@@ -185,18 +190,17 @@
       data.address,
       '</p>',
         '<img class="maps" src="',
-        'https://maps.googleapis.com/maps/api/staticmap?size=336x200&' +
+        'https://maps.googleapis.com/maps/api/staticmap?size=300x180&' +
         'maptype=roadmap&markers=',
         data.coordinates.lat + ',' + data.coordinates.lng,
         '"/>',
-      '<hr/>',
       '</div>'].join('');
 
       return output;
     };
 
     /**
-     * step 2 - search
+     * step 3 - Place save completed
      */
     var goToStep3 = function goToStep3 () {
       window.parent.postMessage({method: 'goto', data: 'step3'}, '*');
@@ -218,28 +222,11 @@
         // collection: 'xx' // need to replace
       }, function (data) {
         console.log('[Save] ', data);
-        loading.hide('.content.save');
-
-        // remove postion adjustment for close button
-        $('#close_btn').removeClass('adjust-for-scrollbar');
-
-        // step 3 save ui data
-        $('#saveCompleteTitle').text(Resource.selected.name);
-        $('#saveCompleteStatus').text(chrome.i18n.getMessage('strPlaceSavedStatus'));
-        $('#saveCompleteManage').text(chrome.i18n.getMessage('strManagePlace'));
-        $('#saveCompleteManage').attr('href',
-          'http://stage.mappingbird.com/app#/point/' + Resource.savePointId + '/' +
-          Resource.saveCollection);
-        if (Resource.scrapeData.images[0]){
-          $('#saveCompletePicture').html(
-            '<img src="' + Resource.scrapeData.images[0] + '"/>'
-          );
-        } else if (data.images[0]) {
-          $('#saveCompletePicture').attr('src', data.images[0].url);
+        var savedImagesUrls = [];
+        for(var i=0;i<4 && i<Resource.activeWindow.images.length; i++){
+          savedImagesUrls.push(Resource.activeWindow.images[i].src);
         }
-        $('#saveCompleteDescription').attr('placeholder', chrome.i18n.getMessage('pholdSavedPlaceDescription'));
-        $('#update').text(chrome.i18n.getMessage('strUpdateBtn'));
-
+        goToSaveImages(savedImagesUrls);
       });
 
       if (searchTooltip) {
@@ -252,24 +239,199 @@
 
     };
 
+    /**
+     * save images
+     */
+    var goToSaveImages = function goToSaveImages(savedImagesUrls){
+      loading.show(chrome.i18n.getMessage('strSavingImage'));
+
+      var maxNumberOfImage = savedImagesUrls.length;
+      var oriNumberofImage = Resource.saveImages.length;
+      var headerImg;
+
+      for(var i=0;i<savedImagesUrls.length; i++){
+
+        Service.SaveImages(savedImagesUrls[i], function(saveImages){
+          if((saveImages.length - oriNumberofImage) === maxNumberOfImage){
+
+            console.log('all images are saved.');
+            loading.hide('.content.save');
+
+            // step 3 save ui data
+            $('#btnEditPhotos').text(chrome.i18n.getMessage('strEditPhotosBtn'));
+            $('#saveCompleteTitle').text(Resource.selected.name);
+            $('#saveCompleteStatus').text(chrome.i18n.getMessage('strPlaceSavedStatus'));
+            $('#saveCompleteManage').text(chrome.i18n.getMessage('strManagePlace'));
+            $('#saveCompleteManage').attr('href',
+              'http://stage.mappingbird.com/app#/point/' + Resource.savePointId + '/' +
+              Resource.saveCollection);
+
+            $('#saveCompletePicture ul').empty();
+            for(var j=0; j<saveImages.length; j++){
+              headerImg = document.createElement('li');
+              headerImg.style.backgroundImage = 'url(' + saveImages[j].src + ')';
+              $('#saveCompletePicture ul').append(headerImg);
+            }
+
+            // initial pic carousel
+            $('#saveHeaderImage').css('width', (saveImages.length*100) + '%');
+            if(saveImages.length > 1){
+              $('.content.save .pic_actions .next_pic').show();
+            }
+
+            $('#saveCompleteDescription').attr('placeholder', chrome.i18n.getMessage('pholdSavedPlaceDescription'));
+            $('#update').text(chrome.i18n.getMessage('strUpdateBtn'));
+
+            $('.content.save .save_complete_icon').removeClass('hideme');
+            $('.content.save .header').fadeIn(350);
+            $('.content.save hr').fadeIn(350);
+            $('.content.save form').fadeIn(350);
+            $('#saveCompleteManage').fadeIn(350);
+          }
+        });
+      }        
+    };
+
+    // When 'Edit Photos' is clicked
+    $('#btnEditPhotos').click(function(){
+      $('#strEditPhotoHeader .numSelected').text(Resource.saveImages.length);
+      $('#strEditPhotoHeader .numTotal').text(Resource.activeWindow.images.length);
+      $('#strEditPhotoHeader .strHeader').text(chrome.i18n.getMessage('strEditPhotosHeader'));
+      $('#doneSelectPhotos').text(chrome.i18n.getMessage('strEditPhotosDone'));
+      $('.content.save .save_complete_icon').addClass('hideme');
+      $('.content.save .header').fadeOut(350);
+      $('.content.save hr').fadeOut(350);
+      $('.content.save form').fadeOut(350);
+      $('#saveCompleteManage').fadeOut(350, function(){
+        $('.content.photos').fadeIn(500, function(){
+          $('.content.save').hide();
+          showEditPhotos();
+        });
+      });
+    });
+
+    // When 'Save' button on search result is clicked
     $('#save').click(function () {
       goToStep3();
     });
 
+    // Show Edit Photo page
+    var showEditPhotos = function showEditPhotos(){
+      window.parent.postMessage({method: 'goto', data: 'selectPhotos'}, '*');
+
+      var itemPhotos;
+      var saveImages = Resource.activeWindow.images;
+      $('.content.photos .header').fadeIn(800);
+      $('#selectPhotoList').fadeIn(500);
+      $('.content.photos .footer').fadeIn(800, function(){
+        $('.content.photos .photo-list').css('height','');
+        
+        $('#selectPhotoList').empty();
+        for(var i=0; i<saveImages.length; i++){
+          itemPhotos = document.createElement('li');
+          itemPhotos.style.backgroundImage = 'url(' + saveImages[i].src + ')';
+          itemPhotos.style.backgroundSize = (saveImages[i].width > saveImages[i].height)? 'auto 100%':'100% auto';
+          itemPhotos.onclick = function(){ clickPhotos($(this)); };
+          if($.grep(Resource.saveImages, function(e){ return e.src == saveImages[i].src;}) == 0){
+            /* do nothing for now */
+          } else {
+            $(itemPhotos).append('<img src="../images/blue_check_mark.png" class="selected" />');
+            $(itemPhotos).addClass('saved');
+          }          
+          $('#selectPhotoList').append(itemPhotos);
+        }
+      });
+    }
+
+    // Trigger click photo when click on check-mark icon
+    $('selectPhotoList .selected').click(function(){ clickPhotos($(this).parent()); });
+
+    // When each photo is clicked
+    var clickPhotos = function clickPhotos(clickedPhoto){
+      if($(clickedPhoto).attr('class') == 'saved'){
+        $(clickedPhoto).removeClass('saved');
+        $(clickedPhoto).children('.selected').fadeOut(150);
+      } else {
+        $(clickedPhoto).addClass('saved');
+        $(clickedPhoto).append('<img src="../images/blue_check_mark.png" class="selected" />');
+      }
+      $('#strEditPhotoHeader .numSelected').text($('#selectPhotoList li.saved').length);
+    }
+
+    // When "Done" button on select-photo page is clicked
+    $('#doneSelectPhotos').click(function(){
+      $('.content.photos .footer').fadeOut(800, function(){
+        $('#selectPhotoList').fadeOut(500);
+        $('.content.photos .photo-list').animate({height: '0'}, 500, function(){
+          $('.content.photos .header').fadeOut(800, function(){
+            
+            // Get current selected photos
+            var newSelectedPhotos = $('#selectPhotoList li.saved'); //all selected photos from the web page
+            var oriSavedPhotos = Resource.saveImages; //default selected photos
+            var newSavedPhotos = newSelectedPhotos;
+            var removePhotos = oriSavedPhotos;
+            var newSavedPhotoUrls = [];
+
+            // Get photos which need to be saved
+            for(var i=0;i<oriSavedPhotos.length;i++){
+              newSavedPhotos = $.grep(newSavedPhotos, function(e){
+                return $(e).css('background-image').replace('url(', '').replace(')','') != oriSavedPhotos[i].src;
+              });
+            }
+
+            // Get photos which need to be removed
+            for(var j=0;j<newSelectedPhotos.length;j++){
+              removePhotos = $.grep(removePhotos, function(e){
+                return e.src != $(newSelectedPhotos[j]).css('background-image').replace('url(', '').replace(')','')
+              });
+            }
+
+            // Remove deselected images
+            
+            for(var n=0; n<removePhotos.length; n++){
+              Service.RemoveImages(removePhotos[n].imgID);
+              Resource.saveImages = $.grep(Resource.saveImages, function(e){
+                return e.imgID != removePhotos[n].imgID;
+              });
+            }
+            
+            console.log(Resource.saveImages);
+
+            // Add new selected images
+            for(var k=0;k<newSavedPhotos.length;k++){
+              newSavedPhotoUrls.push($(newSavedPhotos[k]).css('background-image').replace('url(', '').replace(')',''));
+            }
+            console.log(newSavedPhotoUrls);
+            goToSaveImages(newSavedPhotoUrls);
+
+            
+          });
+        });
+      });
+    });
+
+    // When "comment" field is clicked
+    $('#saveCompleteDescription').focus(function(){
+      window.parent.postMessage({method: 'goto', data: 'addcomments'}, '*');
+      $('#saveCompleteDescription').addClass('onFocus');
+      $('#update').addClass('showme');
+    });
     /**
-     * step 3 - save
+     * step 4 - update place information (tags, comments)
      */
     $('#update').click(function () {
-      loading.show('Update...');
+      loading.show(chrome.i18n.getMessage('strUpdating'));
 
       Service.UpdatePoint({
         tags: $('#saveCompleteTag').val(),
         description: $('#saveCompleteDescription').val()
       }, function () {
         window.parent.postMessage({method: 'goto', data: 'step4'}, '*');
-        loading.hide('.content.save');
-        $('#updateForm').html('<p style="text-align:center;margin:25px 0;"> ' +
-          'Place Updated. </p>');
+        loading.hide('.content.update');
+        /*$('#updateForm').html('<p style="text-align:center;margin:25px 0;"> ' +
+          'Place Updated. </p>');*/
+        $('.content.update .header').text(chrome.i18n.getMessage('strUpdateTitle'));
+        $('.content.update .view').text(chrome.i18n.getMessage('strViewSavedPlace'));
       });
 
       if (doneTooltip) {
@@ -280,6 +442,43 @@
         });
       }
     });
+
+    /**
+     * header picture carousel
+     */
+     $('.content.save .pic_actions .next_pic').click(function(){
+
+      $('#saveHeaderImage').animate({
+        marginLeft: '-=' + $('#saveHeaderImage li').width()
+      }, 250, function(){
+        if($('#saveHeaderImage').css('margin-left') != '0px'){
+          $('.content.save .pic_actions .pre_pic').css('display', 'block');
+        }
+        if($('#saveHeaderImage').css('margin-left') == ('-' + $('#saveHeaderImage li').width()*(Resource.saveImages.length-1)+'px')){
+          $('.content.save .pic_actions .next_pic').css('display', 'none');
+        }
+        if(parseInt($('#saveHeaderImage').css('margin-left')) < parseInt('-' + $('#saveHeaderImage li').width()*(Resource.saveImages.length-1))){
+          $('#saveHeaderImage').css('margin-left', ('-' + $('#saveHeaderImage li').width()*(Resource.saveImages.length-1)+'px'));
+        }
+      });
+     });
+
+     $('.content.save .pic_actions .pre_pic').click(function(){
+      $('#saveHeaderImage').animate({
+        marginLeft: '+=' + $('#saveHeaderImage li').width()
+      }, 250, function(){
+        if($('#saveHeaderImage').css('margin-left') == '0px'){
+          $('.content.save .pic_actions .pre_pic').css('display', 'none');
+        }
+        if($('#saveHeaderImage').css('margin-left') != ('-' + $('#saveHeaderImage li').width()*(Resource.saveImages.length-1)+'px')){
+          $('.content.save .pic_actions .next_pic').css('display', 'block');
+        }
+        if(parseInt($('#saveHeaderImage').css('margin-left')) > 0){
+          $('#saveHeaderImage').css('margin-left','0px');
+        }
+      });
+     });
+
 
     $('#saveCompleteTag').keypress(function(event) {
       // Prevent popup show again if enter key is pressed
@@ -379,7 +578,8 @@
     scrapeData: '',
     selected: {},
     savePointId: null,
-    saveCollection: null
+    saveCollection: null,
+    saveImages: []
   };
 
   var Service = {
@@ -431,6 +631,7 @@
       window.addEventListener('message', function(evt) {
         if (evt.data.method === 'getSelection') {
           Resource.activeWindow = {
+            images: evt.data.images,
             url: evt.data.url,
             title: evt.data.title
           };
@@ -475,13 +676,6 @@
       $.post('http://stage.mappingbird.com/api/points', obj)
         .success(function (data) {
           console.log(Resource.scrapeData);
-          // save image 因為 api 的關係， post /api/images 得獨立發送
-          var imageUrl = 'http://stage.mappingbird.com/api/images';
-          Resource.scrapeData.images.forEach(function(image, index) {
-            if (index < 4) {
-              $.post(imageUrl, {point: data.id, url: image});
-            }
-          });
 
           // save id
           Resource.savePointId = data.id;
@@ -491,6 +685,31 @@
 
           if (fn) {
             fn(data);
+          }
+          
+        });
+    },
+    SaveImages: function (imgUrl, fn) {
+      var apiUrl = 'http://stage.mappingbird.com/api/images';
+      $.post(apiUrl, {point: Resource.savePointId, url: imgUrl})
+      .done(function(img){
+        Resource.saveImages.push({
+          imgID: img.id,
+          src: img.url
+        });
+        if(fn){
+          fn(Resource.saveImages);
+        }
+      });
+    },
+    RemoveImages: function (imgID, fn){
+      $.ajax({
+        url: 'http://stage.mappingbird.com/api/images/' + imgID,
+        type: 'DELETE'
+      })
+        .success(function(){
+          if(fn){
+            fn();
           }
         });
     },
